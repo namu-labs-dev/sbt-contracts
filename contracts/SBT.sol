@@ -44,6 +44,20 @@ contract SBT is ERC721, ERC721Enumerable, Ownable {
         return _locked[tokenId];
     }
 
+    function autoSafeMint(address to) public onlyOwner {
+        uint256 tokenId = totalSupply() + 1;
+        while (_locked[tokenId]) {
+            tokenId += 1;
+        }
+        require(balanceOf(to) == 0, "MNT01");
+        require(_locked[tokenId] != true, "MNT02");
+
+        _locked[tokenId] = true;
+        emit Locked(tokenId);
+
+        _safeMint(to, tokenId);
+    }
+
     function safeMint(address to, uint256 tokenId) public onlyOwner {
         require(balanceOf(to) == 0, "MNT01");
         require(_locked[tokenId] != true, "MNT02");

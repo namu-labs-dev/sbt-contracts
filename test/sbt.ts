@@ -18,6 +18,7 @@ describe('SBT', async function () {
     const sbtSymbol = 'SBT'
     sbt = await sbtContract.deploy(sbtName, sbtSymbol, baseURI)
     ;[ownerAccount, otherAccount] = await ethers.getSigners()
+    console.table(ownerAccount.address)
     await sbt.safeMint(ownerAccount.address, tokenID0)
   })
 

@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+const ALCHEMY_API_KEY = 'wFqh0iulROT4cLCCkVBFjCFMol86a7r4'
 const commonConfig = {
   gas: 5_000_000,
   accounts: {
@@ -16,18 +17,21 @@ const commonConfig = {
 const config: HardhatUserConfig = {
   solidity: '0.8.16',
   networks: {
-    localhost: {
-      gas: 1_400_000
+    mumbai: {
+      url: `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+      accounts: {
+        mnemonic: process.env.MNEMONIC || ''
+      }
+      // gas: 5_000_000,
+      // gasPrice: 60000000000
     },
-    baobab: {
-      url: 'https://api.baobab.klaytn.net:8651',
-      ...commonConfig,
-      gasPrice: 250_000_000_000
-    },
-    cypress: {
-      url: 'https://public-en-cypress.klaytn.net',
-      ...commonConfig,
-      gasPrice: 250_000_000_000
+    polygon: {
+      url: `https://polygon-mainnet.g.alchemy.com/v2/MPUYCtv0CbPRqR1DtRlf3Cx2DS_nAund`,
+      accounts: {
+        mnemonic: process.env.MNEMONIC || ''
+      }
+      // gas: 5_000_000,
+      // gasPrice: 60000000000
     }
   }
 }
@@ -44,7 +48,7 @@ task('balance', "Prints an account's balance")
   .setAction(async (taskArgs, hre) => {
     const account = hre.web3.utils.toChecksumAddress(taskArgs.account)
     const balance = await hre.web3.eth.getBalance(account)
-    console.log(hre.web3.utils.fromWei(balance, 'ether'), 'KLAY')
+    console.log(hre.web3.utils.fromWei(balance, 'ether'), 'ETH')
   })
 
 task('deploy', 'Deploy SBT')
